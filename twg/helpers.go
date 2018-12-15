@@ -12,7 +12,7 @@ import (
 )
 
 func topicToDir(topic string) string {
-	return filepath.Join("/", "tmp", "termwg", topic)
+	return filepath.Join(os.TempDir(), "termwg", topic)
 }
 
 func awaitDirEmpty(dir string) {
@@ -50,7 +50,12 @@ func getCountFromDir(dir string) int {
 func addCountToDir(dir string) {
 	path := filepath.Join(dir, fmt.Sprintf("%s", uuid.NewV4()))
 
-	_, err := os.OpenFile(path, os.O_RDONLY|os.O_CREATE, 0666)
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = os.OpenFile(path, os.O_RDONLY|os.O_CREATE, 0666)
 	if err != nil {
 		panic(err)
 	}

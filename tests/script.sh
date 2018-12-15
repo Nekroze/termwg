@@ -4,22 +4,27 @@ set -euf
 termwg --help
 
 id="${1:-$(uuidgen)}"
-path="/tmp/$id"
+path="$(mktemp -d)/$id"
 
 test_subroutine() {
-    termwg wait "$id"
     touch "$path"
+    termwg wait "$id"
+    rm -f "$path"
 }
 
-test_subroutine &
+[ ! -f "$path" ]
 
-sleep .1
+test_subroutine &
+sleep 1
+termwg 'add' 1 "$id"
+
+[ -f "$path" ]
+
 termwg 'done' "$id"
+termwg 'done' "$id"
+
 wait
 
-if ! [ -f "$path" ]; then
-    echo "wait did not complete!"
-    exit 1
-fi
+[ ! -f "$path" ]
 
-echo "PASSED!"
+echo 'PASSED!'
