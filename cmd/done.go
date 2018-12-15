@@ -16,22 +16,20 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/Nekroze/termwg/twg"
 	"github.com/spf13/cobra"
 )
 
 var doneCmd = &cobra.Command{
-	Use:   "done",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "done [<CHANNEL_NAME>]",
+	Short: "Decrement the counter of <CHANNEL_NAME> or 'default' if not given",
+	Long:  `Decrement the counter of <CHANNEL_NAME> or 'default' if not given.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("done called")
+		channel := "default"
+		if len(args) > 0 {
+			channel = args[0]
+		}
+		twg.WaitGroup{channel}.Done()
 	},
 }
 

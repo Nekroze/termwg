@@ -16,22 +16,21 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/Nekroze/termwg/twg"
 	"github.com/spf13/cobra"
 )
 
 var waitCmd = &cobra.Command{
-	Use:   "wait",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "wait [<CHANNEL_NAME>]",
+	Short: "wait for a the given channel name (or 'default') counter to reach 0",
+	Long: `wait for a the given channel name (or 'default') counter to reach 0.
+If the channel counter is currently 0, wait will add 1 to the couter for convenience.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("wait called")
+		channel := "default"
+		if len(args) > 0 {
+			channel = args[0]
+		}
+		twg.WaitGroup{channel}.Wait()
 	},
 }
 

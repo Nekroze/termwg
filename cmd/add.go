@@ -16,22 +16,33 @@
 package cmd
 
 import (
-	"fmt"
+	"strconv"
 
+	"github.com/Nekroze/termwg/twg"
 	"github.com/spf13/cobra"
 )
 
 var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "add [<DELTA>] [<CHANNEL_NAME>]",
+	Short: "Add <DELTA> (defaulting to 1) to the counter of the given <CHANNEL_NAME> or 'default' if not provided",
+	Long:  `Add <DELTA> (defaulting to 1) to the counter of the given <CHANNEL_NAME> or 'default' if not provided.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("add called")
+		var err error
+
+		delta := int64(1)
+		if len(args) > 0 {
+			delta, err = strconv.ParseInt(args[0], 10, 64)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		channel := "default"
+		if len(args) > 1 {
+			channel = args[1]
+		}
+
+		twg.WaitGroup{channel}.Add(int(delta))
 	},
 }
 
