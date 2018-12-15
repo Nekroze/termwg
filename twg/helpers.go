@@ -34,7 +34,7 @@ func awaitDirEmpty(dir string) {
 			if !ok {
 				panic(err)
 			}
-			fmt.Errorf("OH NO! %s", err)
+			fmt.Println("OH NO!", err)
 		}
 	}
 }
@@ -50,7 +50,10 @@ func getCountFromDir(dir string) int {
 func addCountToDir(dir string) {
 	path := filepath.Join(dir, fmt.Sprintf("%s", uuid.NewV4()))
 
-	os.OpenFile(path, os.O_RDONLY|os.O_CREATE, 0666)
+	_, err := os.OpenFile(path, os.O_RDONLY|os.O_CREATE, 0666)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func subCountFromDir(dir string) {

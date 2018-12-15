@@ -37,12 +37,14 @@ var addCmd = &cobra.Command{
 			}
 		}
 
-		channel := "default"
+		channel := defaultChannel
 		if len(args) > 1 {
 			channel = args[1]
 		}
 
-		twg.WaitGroup{channel}.Add(int(delta))
+		twg.WaitGroup{
+			Name: channel,
+		}.Add(int(delta))
 	},
 }
 

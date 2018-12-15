@@ -3,17 +3,13 @@ version: '3.4'
 services:
 
   instance:
-    image: 'nekroze/ishmael:latest'
+    image: 'nekroze/termwg:latest'
     build:
       context: ../
       target: final
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
   tests:
-    image: 'nekroze/ishmael:test'
+    image: 'nekroze/termwg:test'
     build:
       context: ../
-      target: test
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      target: build

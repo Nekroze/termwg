@@ -26,11 +26,13 @@ var waitCmd = &cobra.Command{
 	Long: `wait for a the given channel name (or 'default') counter to reach 0.
 If the channel counter is currently 0, wait will add 1 to the couter for convenience.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		channel := "default"
+		channel := defaultChannel
 		if len(args) > 0 {
 			channel = args[0]
 		}
-		twg.WaitGroup{channel}.Wait()
+		twg.WaitGroup{
+			Name: channel,
+		}.Wait()
 	},
 }
 

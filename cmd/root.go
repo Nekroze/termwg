@@ -22,8 +22,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const defaultChannel = "default"
+
 var rootCmd = &cobra.Command{
-	Use:   "termwg",
+	Use:   "termwg [<SUBCOMMAND>] [<ARGUMENTS>...]",
 	Short: "Synchronise multiple terminals using a WaitGroup",
 	Long:  `Synchronise multiple terminals using a WaitGroup.`,
 }

@@ -11,7 +11,11 @@ type WaitGroup struct {
 func (wg WaitGroup) Wait() {
 	dir := topicToDir(wg.Name)
 
-	os.MkdirAll(dir, os.ModePerm)
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+
 	if getCountFromDir(dir) < 1 {
 		addCountToDir(dir)
 	}

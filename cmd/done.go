@@ -25,11 +25,13 @@ var doneCmd = &cobra.Command{
 	Short: "Decrement the counter of <CHANNEL_NAME> or 'default' if not given",
 	Long:  `Decrement the counter of <CHANNEL_NAME> or 'default' if not given.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		channel := "default"
+		channel := defaultChannel
 		if len(args) > 0 {
 			channel = args[0]
 		}
-		twg.WaitGroup{channel}.Done()
+		twg.WaitGroup{
+			Name: channel,
+		}.Done()
 	},
 }
 

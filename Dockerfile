@@ -11,25 +11,14 @@ RUN curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.s
 # Go 1.11+ modules
 ENV GO111MODULE=on
 
-# Deps
-COPY go.mod go.sum ./
-RUN go get -v -d ./...
-
-# Check and compile everything
-COPY main.go ./main.go
-COPY cmd ./cmd
+COPY . .
 RUN richgo test -v ./... \
  && golangci-lint run --deadline '2m' --enable-all --disable gochecknoglobals,gochecknoinits \
  && CGO_ENABLED=0 GOOS=linux GOARCH=386 go build \
     -a -installsuffix cgo -ldflags='-w -s' -o "/usr/bin/${PROJECT}" -v \
     .
 
-FROM nekroze/containaruba:alpine AS test
-CMD ["--order=random"]
-
-COPY --from=build "/usr/bin/${PROJECT}" "/usr/bin/${PROJECT}"
-COPY ./tests/features /usr/src/app/features
-
+CMD ./tests/script.sh test
 
 FROM scratch AS final
 
