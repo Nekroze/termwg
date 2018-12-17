@@ -42,7 +42,7 @@ func awaitDirEmpty(dir string) {
 func getCountFromDir(dir string) int {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
-		panic(err)
+		return 0
 	}
 	return len(files)
 }
@@ -64,7 +64,10 @@ func addCountToDir(dir string) {
 func subCountFromDir(dir string) {
 	files, err := ioutil.ReadDir(dir)
 	if err != nil {
-		panic(err)
+		return
+	}
+	if len(files) < 1 {
+		return
 	}
 	name := files[rand.Intn(len(files))].Name()
 	path := filepath.Join(dir, name)
